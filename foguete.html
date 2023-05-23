@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foguetação</title>
+    <style>
+        body {
+            margin: 0px;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            background-image: linear-gradient(0deg,#92d5ec,#2f5cd7);
+        }
+
+        .fogueteSafado {
+            position: absolute;
+            cursor: pointer;
+            left: 50%;
+            margin-left: -40px;
+            top: 100%;
+            margin-top: -80px;
+            width: 80px;
+            z-index: 2;
+        }
+
+        .grama {
+            width: 100%;
+            height: 40px;
+            background-color: green;
+            position: absolute;
+            bottom: 0px;
+            left: 0px;
+        }
+    </style>
+</head>
+<body>
+    <img src="foguete.gif" class="fogueteSafado" onclick="Comecar();" id="fogueteTarado"> 
+
+    <audio id="audio1" autoplay="">
+        <source src="contagem_regressiva.mp3" type="audio/mp3">
+    </audio>
+
+    <audio id="audio2" autoplay="">
+        <source src="lancamento_foguete.mp3" type="audio/mp3">
+    </audio>
+
+    <audio id="audio3" autoplay="">
+        <source src="problem.mp3" type="audio/mp3">
+    </audio>
+
+    <audio id="audio4" autoplay="">
+        <source src="shutdown.mp3" type="audio/mp3">
+    </audio>
+
+    <div class="grama"></div>
+</body>
+<script src="jquery-3.7.0.min.js"></script>
+<script>
+
+     //SOM
+     function Comecar() {
+        temporizador = setTimeout(Subir, 20000);
+
+        contagem = document.getElementById('audio1');
+        contagem.play();
+
+        temporizador2 = setTimeout(Tocar2, 20000);
+        temporizador3 = setTimeout(Tocar3, 38000);
+        temporizador4 = setTimeout(Tocar4, 55000);
+     }
+
+     function Tocar2() {
+        lancamento = document.getElementById('audio2');
+        lancamento.play();
+     }
+
+     function Tocar3() {
+        descer = document.getElementById('audio3');
+        descer.play();
+     }
+
+     function Tocar4() {
+        shutdow = document.getElementById('audio4');
+        shutdow.play();
+     }
+
+    //Pegar o tempo inicial:
+    d = new Date();
+    tempo_inicial = d.getTime();
+
+    x = 800;
+    y = 100;
+    function Subir() {
+        TOPO = y + "px";
+        ESQUERDA = x + "px";
+       $("#fogueteTarado").animate({left:ESQUERDA,top:TOPO},18500);
+       
+       temporizador = null; //Cancela a subida
+       temporizador = setInterval(Descer,2000);
+    }
+
+    function Descer() {
+        y = y + 50;
+        if(y>600)
+        {
+            y = 750;
+        }
+        TOPO = y + "px";
+        $("#fogueteTarado").animate({left:ESQUERDA,top:TOPO},2000);
+    }
+
+    document.onkeydown = Pega_Tecla;
+    function Pega_Tecla(e) {	
+        e = e || window.event;
+        tecla = e.keyCode;
+        console.log(tecla); // MOSTRA O CÓDIGO DA TECLA PRESSIONADA
+       
+        d2 = new Date();
+        tempo_final = d2.getTime();
+        if(tempo_final-tempo_inicial>2000){
+            tempo_inicial = tempo_final;
+
+            if(tecla == 37){
+                $("#fogueteTarado").stop()
+                x = x - 200
+                ESQUERDA = x + "px"
+                Descer()
+            }
+
+            if(tecla == 39){
+                $("#fogueteTarado").stop()
+                x = x + 200
+                ESQUERDA = x + "px"
+                Descer()
+            }
+        }
+    }
+</script>
+</html>
